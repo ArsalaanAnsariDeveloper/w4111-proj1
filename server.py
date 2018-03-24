@@ -165,12 +165,11 @@ def another():
 
 
 # Example of adding new data to the database
-@app.route('/add', methods=['POST'])
-def add():
-  print("Hello")
+@app.route('/search', methods=['POST'])
+def search():
   name = request.form['name']
   print(name)
-  cursor = g.conn.execute("SELECT S.name, S.employee_count, F.name, I.industry_name FROM Startups S JOIN Founder F ON F.startup_id = S.startup_id JOIN Primary_Industry I ON I.startup_id  = S.startup_id  WHERE S.name = %(name)s", {'name': "Coda"})
+  cursor = g.conn.execute("SELECT S.name, S.employee_count, F.name, I.industry_name FROM Startups S JOIN Founder F ON F.startup_id = S.startup_id JOIN Primary_Industry I ON I.startup_id  = S.startup_id  WHERE S.name = %(name)s", {'name': name})
   names = []
   names.append(["Startup", "Employee Count", "Founder", "Industry",]) 
   for result in cursor:
