@@ -178,6 +178,21 @@ def investinfo():
   context = dict(data = names)
   return render_template("index.html", **context)
 
+@app.route('/industry', methods=['POST'])
+def industry():
+  name = request.form['name']
+  print(name)
+  cursor = g.conn.execute("SELECT I.industry_name, COUNT(s.startup_id), I.average_valuation FROM Primary_Industry I LEFT OUTER JOIN Startups S ON S.startup_id = I.startup_id GROUP BY I.industry_name, I.average_valuation HAVING I.industry_name = %(name)s", {'name': name})
+
+  names = []
+  names.append(["Industry", "Number of Startups", "Avg Valuation"]) 
+  for result in cursor:
+    names.append(result)  # can also be accessed using result[0]
+  cursor.close()
+  context = dict(data = names)
+  return render_template("index.html", **context)
+
+
 
 @app.route('/login')
 def login():
