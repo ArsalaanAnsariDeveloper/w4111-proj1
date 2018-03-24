@@ -8,19 +8,36 @@
 
 
 <body>
-  <h1>Some famous Computer Scientists</h1>
-  <div>{{data}}</div>
+  <h1>Startup Database Page</h1>
+<!--  <div>{{data}}</div> -->
+<form method="POST" action="/add">
 
-  <div>
+<p>Search for Startup by name: <input type="text" name="name"> <input type="submit" value="Add"></p>
+
+
+<!--  <div>
     {% for n in data %}
     <div>{{n}}</div>
     {% endfor %}
   </div>
+-->
 
+<table>
+{% for item in data %}
+
+<tr>
+    <td>{{item[0]}}</td>
+    <td>{{item[1]}}</td>
+    <td>{{item[2]}}</td>
+    <td>{{item[3]}}</td>
+</tr>
+
+
+{% endfor %}
+
+</table>
 <p><a href="another">Go to the other page</a></p>
 
-<form method="POST" action="/add">
-<p>Name of new computer scientist: <input type="text" name="name"> <input type="submit" value="Add"></p>
 </form>
 
 </body>

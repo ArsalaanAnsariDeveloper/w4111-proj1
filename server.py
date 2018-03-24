@@ -46,12 +46,6 @@ engine = create_engine(DATABASEURI)
 # Example of running queries in your database
 # Note that this will probably not work if you already have a table named 'test' in your database, containing meaningful data. This is only an example showing you how to run queries in your database using SQLAlchemy.
 #
-engine.execute("""CREATE TABLE IF NOT EXISTS test (
-  id serial,
-  name text
-);""")
-engine.execute("""INSERT INTO test(name) VALUES ('grace hopper'), ('alan turing'), ('ada lovelace');""")
-
 
 @app.before_request
 def before_request():
@@ -113,10 +107,13 @@ def index():
   #
   # example of a database query
   #
-  cursor = g.conn.execute("SELECT name FROM test")
+  
+
+  cursor = g.conn.execute("SELECT S.name, S.employee_count, F.name, I.industry_name FROM Startups S JOIN Founder F ON F.startup_id = S.startup_id JOIN Primary_Industry I ON I.startup_id  = S.startup_id")
   names = []
+  names.append(["Startup", "Employee Count", "Founder", "Industry",])
   for result in cursor:
-    names.append(result['name'])  # can also be accessed using result[0]
+    names.append(result)  # can also be accessed using result[0]
   cursor.close()
 
   #
@@ -145,9 +142,9 @@ def index():
   #     <div>{{n}}</div>
   #     {% endfor %}
   #
+
   context = dict(data = names)
-
-
+ 
   #
   # render_template looks in the templates/ folder for files.
   # for example, the below file reads template/index.html
@@ -170,9 +167,17 @@ def another():
 # Example of adding new data to the database
 @app.route('/add', methods=['POST'])
 def add():
+  print("Hello")
   name = request.form['name']
-  g.conn.execute('INSERT INTO test VALUES (NULL, ?)', name)
-  return redirect('/')
+  print(name)
+  cursor = g.conn.execute("SELECT S.name, S.employee_count, F.name, I.industry_name FROM Startups S JOIN Founder F ON F.startup_id = S.startup_id JOIN Primary_Industry I ON I.startup_id  = S.startup_id  WHERE S.name = %(name)s", {'name': "Coda"})
+  names = []
+  names.append(["Startup", "Employee Count", "Founder", "Industry",]) 
+  for result in cursor:
+    names.append(result)  # can also be accessed using result[0]
+  cursor.close()
+  context = dict(data = names)
+  return render_template("index.html", **context)
 
 
 @app.route('/login')
