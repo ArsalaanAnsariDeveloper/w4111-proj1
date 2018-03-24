@@ -161,17 +161,17 @@ def index():
 #
 @app.route('/another')
 def another():
-  return render_template("another.html")
+  return redirect('/')
 
 
 # Example of adding new data to the database
-@app.route('/search', methods=['POST'])
-def search():
+@app.route('/investinfo', methods=['POST'])
+def investinfo():
   name = request.form['name']
   print(name)
-  cursor = g.conn.execute("SELECT S.name, S.employee_count, F.name, I.industry_name FROM Startups S JOIN Founder F ON F.startup_id = S.startup_id JOIN Primary_Industry I ON I.startup_id  = S.startup_id  WHERE S.name = %(name)s", {'name': name})
+  cursor = g.conn.execute("SELECT S.name, I.investor_name, I.investment_amount, V.name, V.fund_size, A.name FROM Startups S JOIN Investor_Deal I ON I.startup_id = S.startup_id JOIN Venture_Capital_Fund V ON I.fund_id  = V.fund_id LEFT JOIN Acquirer A ON S.startup_id = A.startup_id  WHERE S.name = %(name)s", {'name': name})
   names = []
-  names.append(["Startup", "Employee Count", "Founder", "Industry",]) 
+  names.append(["Startup", "Investor Name", "Invest Amount", "VC Name", "VC Size", "Acquirer"]) 
   for result in cursor:
     names.append(result)  # can also be accessed using result[0]
   cursor.close()
