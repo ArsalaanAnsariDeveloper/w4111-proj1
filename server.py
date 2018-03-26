@@ -168,8 +168,9 @@ def another():
 @app.route('/investinfo', methods=['POST'])
 def investinfo():
   name = request.form['name']
+  name = name + '%'
   print(name)
-  cursor = g.conn.execute("SELECT S.name, I.investor_name, I.investment_amount, V.name, V.fund_size, A.name FROM Startups S JOIN Investor_Deal I ON I.startup_id = S.startup_id JOIN Venture_Capital_Fund V ON I.fund_id  = V.fund_id LEFT JOIN Acquirer A ON S.startup_id = A.startup_id  WHERE S.name = %(name)s", {'name': name})
+  cursor = g.conn.execute("SELECT S.name, I.investor_name, I.investment_amount, V.name, V.fund_size, A.name FROM Startups S JOIN Investor_Deal I ON I.startup_id = S.startup_id JOIN Venture_Capital_Fund V ON I.fund_id  = V.fund_id LEFT JOIN Acquirer A ON S.startup_id = A.startup_id  WHERE S.name LIKE %(name)s", {'name': name})
   names = []
   names.append(["Startup", "Investor Name", "Invest Amount", "VC Name", "VC Size", "Acquirer"]) 
   for result in cursor:
@@ -181,8 +182,9 @@ def investinfo():
 @app.route('/industry', methods=['POST'])
 def industry():
   name = request.form['name']
+  name = name + '%'
   print(name)
-  cursor = g.conn.execute("SELECT I.industry_name, COUNT(s.startup_id), I.average_valuation FROM Primary_Industry I LEFT OUTER JOIN Startups S ON S.startup_id = I.startup_id GROUP BY I.industry_name, I.average_valuation HAVING I.industry_name = %(name)s", {'name': name})
+  cursor = g.conn.execute("SELECT I.industry_name, COUNT(s.startup_id), I.average_valuation FROM Primary_Industry I LEFT OUTER JOIN Startups S ON S.startup_id = I.startup_id GROUP BY I.industry_name, I.average_valuation HAVING I.industry_name LIKE  %(name)s", {'name': name})
 
   names = []
   names.append(["Industry", "Number of Startups", "Avg Valuation"]) 
