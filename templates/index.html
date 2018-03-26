@@ -5,6 +5,7 @@
 
 <style>
 
+
 h1, p {
 text-align: center;
 }
@@ -23,11 +24,7 @@ th, td {
     padding: 8px;
 }
 
-form { 
-margin: 0 auto; 
-width:250px;
-text-align: center;
-}
+
 
 </style>
 
@@ -42,16 +39,17 @@ text-align: center;
 
 </form>
 
-<form method="POST" action="/acquirer">
- <input type="submit" value="Acquried Startups">
-
-</form>
-
 <form method="POST" action = "/ginv">
 
 <p>Search for Startups with Investments Greater than: <input type="text" name="name"> <input type="submit" value="Search"></p>
 
 </form>
+
+<form method="POST" action="/acquirer">
+ <p>Only show Acquired Startups<input type="submit" value="Sort"></p>
+
+</form>
+
 
 <!--  <div>
     {% for n in data %}

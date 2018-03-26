@@ -165,6 +165,12 @@ def refresh():
   return redirect('/')
 
 
+@app.route('/index')
+def blah():
+  return render_template("index.html")
+
+
+
 @app.route('/another')
 def another():
   return render_template("another.html")
@@ -261,15 +267,22 @@ def industry():
 def greaterInvest():
   name = request.form['name']
   print(name)
-  
-  cursor = g.conn.execute("SELECT S.name, V.name, I.investor_name, I.investment_amount FROM Startups S JOIN Investor_Deal I ON I.startup_id = S.startup_id  JOIN Venture_Capital_Fund V ON V.fund_Id = I.fund_id WHERE I.investment_amount > %(name)s ORDER BY I.investment_amount", {'name': name})
+  if(name != ''):
+    cursor = g.conn.execute("SELECT S.name, V.name, I.investor_name, I.investment_amount FROM Startups S JOIN Investor_Deal I ON I.startup_id = S.startup_id  JOIN Venture_Capital_Fund V ON V.fund_Id = I.fund_id WHERE I.investment_amount > %(name)s ORDER BY I.investment_amount", {'name': name})
 
-  names = []
-  names.append(["Startup", "VCF", "Investor", "Investment Amount"]) 
-  for result in cursor:
-    names.append(result)  # can also be accessed using result[0]
-  cursor.close()
-  context = dict(data = names)
+
+  
+    names = []
+    names.append(["Startup", "VCF", "Investor", "Investment Amount"]) 
+    for result in cursor:
+      names.append(result)  # can also be accessed using result[0]
+    cursor.close()
+    context = dict(data = names)
+  
+  else:
+    names = []
+    context = dict(data = names)
+
   return render_template("index.html", **context)
 
 
