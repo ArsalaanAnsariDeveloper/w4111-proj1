@@ -27,7 +27,7 @@ th, td {
 </head>
 
 <body>
-  <h1>Startup Database Page</h1>
+  <h1>Startup Investment Page</h1>
 <!--  <div>{{data}}</div> -->
 <form method="POST" action="/investinfo">
 
@@ -38,6 +38,12 @@ th, td {
 <form method="POST" action="/industry">
 
 <p>Search Industry Information: <input type="text" name="name"> <input type="submit" value="Search"></p>
+
+</form>
+
+<form method="POST" action = "/ginv">
+
+<p>Search for Startups with Investments Greater than: <input type="text" name="name"> <input type="submit" value="Search"></p>
 
 </form>
 
@@ -64,9 +70,9 @@ th, td {
 {% endfor %}
 
 </table>
-<p><a href="another">Return to Main Page</a></p>
+<p><a href="another">Go to Industry Page</a></p>
+<p><a href="refresh">Refresh Page</a></p>
 
-</form>
 
 </body>
 

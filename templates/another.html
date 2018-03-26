@@ -1,1 +1,95 @@
-hello, I am another file!
+<html>
+  <head>
+ 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+<style>
+
+h1, p {
+text-align: center;
+}
+
+table, td, th {
+border: 1px solid #ddd;
+    text-align: left;
+}
+
+table {
+    border-collapse: collapse;
+    width: 50%;
+}
+
+th, td {
+    padding: 8px;
+}
+
+form { 
+margin: 0 auto; 
+width:250px;
+text-align: center;
+}
+</style>
+
+</head>
+
+<body>
+  <h1>Industry Information</h1>
+<!--  <div>{{data}}</div> -->
+
+<p>Click the Checkboxes to get industry info </p>
+
+
+<form action="/ind" method="POST">
+  <input type="checkbox" name="prod" value="Prod"> Productivity <br>
+  <input type="checkbox" name="fin" value="Fin"> Fintech <br>
+   <input type="checkbox" name="crowd" value="Crowd"> Crowdfunding <br>
+  <input type="checkbox" name="real" value="Real"> RealEstate <br>
+ <input type="checkbox" name="saas" value="Saas"> SAAS <br>
+  <input type="checkbox" name="music" value="Music"> Music <br>
+ <input type="checkbox" name="tran" value="Tran"> Transportation <br>
+  <input type="checkbox" name="analy" value="Analy"> Analytics <br>
+ <input type="checkbox" name="mob" value="Mobile"> Mobile Devices<br>
+  <input type="checkbox" name="soc" value="Soc"> Social Media <br>
+ <input type="checkbox" name="bus" value="Bus"> Business Intelligence <br>
+  <input type="checkbox" name="ele" value="Ele"> Electronics <br>
+ <input type="checkbox" name="inte" value="Inte"> Internet <br>
+
+
+
+<input type="submit" value="Submit">
+</form>
+
+
+
+
+<!--  <div>
+    {% for n in data %}
+    <div>{{n}}</div>
+    {% endfor %}
+  </div>
+-->
+
+<table align =  "center" >
+{% for item in data %}
+
+<tr>
+    {%for i in item %}
+    <td>{{i}}</td>
+   <!-- <td>{{item[1]}}</td>
+    <td>{{item[2]}}</td>
+    <td>{{item[3]}}</td> -->
+    {% endfor %}
+</tr>
+
+
+{% endfor %}
+
+</table>
+<p><a href="index">Return to Investment Page</a></p>
+<p><a href="another">Refresh Page</a></p>
+
+
+</body>
+
+
+</html>

@@ -161,7 +161,50 @@ def index():
 #
 @app.route('/another')
 def another():
-  return redirect('/')
+  return render_template("another.html")
+
+@app.route('/ind', methods=['POST'])
+def indPage():
+
+
+  ind = {"prod": 0 , "fin" : 0, "crowd" : 0, "real" : 0, "saas" : 0, 'music' : 0, 'tran': 0, 'analy': 0, 'mob' : 0, 'soc': 0, 'bus': 0, 'ele'  : 0, 'inte' : 0}
+ 
+
+  trans = {"prod": "Productivity" , "fin" : "Fintech" , "crowd" : "Crowdfunding", "real" : "RealEstate", "saas" : "SAAS", 'music' : "Music" , 'tran': "Transportation", 'analy': "Analytics", 'mob' : "Mobile Devices", 'soc': "Social Media", 'bus': "Business Intelligence", 'ele' : "Electronics" ,  'inte' : "Internet"}
+ 
+  query1 = "SELECT I.industry_name, COUNT(s.startup_id), I.average_valuation FROM Primary_Industry I LEFT OUTER JOIN Startups S ON S.startup_id = I.startup_id GROUP BY I.industry_name, I.average_valuation HAVING "
+
+
+  for key in ind:
+    temp = request.form.get(key)
+    if(temp):
+      ind[key] += 1
+
+  count = 0
+
+  for key in ind:
+    if ind[key] == 1:
+       if(count == 0):
+         query1 += "I.industry_name = '" + trans[key] + "'"
+       else:
+	 query1 += " or I.industry_name = '" + trans[key] + "'"
+       count += 1
+
+  print(query1)
+
+  cursor = g.conn.execute(query1)
+  
+  names = []
+  names.append(["Industry", "Number of Startups", "Avg Valuation"]) 
+  for result in cursor:
+    names.append(result)  # can also be accessed using result[0]
+  cursor.close()
+  context = dict(data = names)
+  return render_template("another.html", **context)
+
+
+	
+
 
 
 # Example of adding new data to the database
@@ -188,6 +231,21 @@ def industry():
 
   names = []
   names.append(["Industry", "Number of Startups", "Avg Valuation"]) 
+  for result in cursor:
+    names.append(result)  # can also be accessed using result[0]
+  cursor.close()
+  context = dict(data = names)
+  return render_template("index.html", **context)
+
+@app.route('/ginv', methods=['POST'])
+def greaterInvest():
+  name = request.form['name']
+  print(name)
+  
+  cursor = g.conn.execute("SELECT S.name, V.name, I.investor_name, I.investment_amount FROM Startups S JOIN Investor_Deal I ON I.startup_id = S.startup_id  JOIN Venture_Capital_Fund V ON V.fund_Id = I.fund_id WHERE I.investment_amount > %(name)s ORDER BY I.investment_amount", {'name': name})
+
+  names = []
+  names.append(["Startup", "VCF", "Investor", "Investment Amount"]) 
   for result in cursor:
     names.append(result)  # can also be accessed using result[0]
   cursor.close()
