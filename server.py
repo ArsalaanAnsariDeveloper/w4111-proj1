@@ -159,6 +159,12 @@ def index():
 # Notice that the function name is another() rather than index()
 # The functions for each app.route need to have different names
 #
+
+@app.route('/refresh')
+def refresh():
+  return redirect('/')
+
+
 @app.route('/another')
 def another():
   return render_template("another.html")
@@ -204,6 +210,20 @@ def indPage():
 
 
 	
+@app.route('/acquirer', methods=['POST'])
+def acquire():
+
+  cursor = g.conn.execute("SELECT s.name, A.name, A.industry FROM Startups S JOIN Acquirer A on S.startup_id = A.startup_id")
+
+  names = []
+  names.append(["Startup", "Acquirer", "Acquirer Industry"]) 
+  for result in cursor:
+    names.append(result)  # can also be accessed using result[0]
+  cursor.close()
+  context = dict(data = names)
+  
+  return render_template("index.html", **context)
+
 
 
 
